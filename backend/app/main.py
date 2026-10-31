@@ -3,8 +3,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .database import Base, engine
-from .routers import auth, admin, subscriptions
+from .routers import auth, admin, subscriptions, payments
 from . import subscription_models  # register subscription tables with SQLAlchemy metadata
+from . import payment_models
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -22,7 +23,7 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(admin.router)
 app.include_router(subscriptions.router)
-
+app.include_router(payments.router)
 @app.get("/health", tags=["System"])
 def health():
     return {"status": "ok", "service": "SubSentry AI"}
