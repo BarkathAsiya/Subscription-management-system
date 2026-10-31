@@ -1,122 +1,144 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState, useEffect } from 'react';
+import { api } from './api';
+import ProductsTab from './components/ProductsTab';
+import PlansTab from './components/PlansTab';
+import DiscountsTab from './components/DiscountsTab';
+import TaxesTab from './components/TaxesTab';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [activeTab, setActiveTab] = useState('products');
+  const [notification, setNotification] = useState(null);
+  const [apiHealth, setApiHealth] = useState({ online: false, checking: true });
+
+  useEffect(() => {
+    let isMounted = true;
+    api.checkHealth()
+      .then((res) => {
+        if (isMounted) {
+          setApiHealth({ online: Boolean(res?.status === 'online'), checking: false });
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setApiHealth({ online: false, checking: false });
+        }
+      });
+
+    const interval = setInterval(() => {
+      api.checkHealth()
+        .then((res) => {
+          if (isMounted) {
+            setApiHealth({ online: Boolean(res?.status === 'online'), checking: false });
+          }
+        })
+        .catch(() => {
+          if (isMounted) {
+            setApiHealth({ online: false, checking: false });
+          }
+        });
+    }, 30000);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const handleNotification = (message, type = 'info') => {
+    setNotification({ message, type, id: Date.now() });
+    setTimeout(() => {
+      setNotification((prev) => (prev?.message === message ? null : prev));
+    }, 5000);
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app-layout">
+      {/* Top Header */}
+      <header className="app-header">
+        <div className="header-brand">
+          <div className="brand-logo">🛡️</div>
+          <div>
+            <h1 className="brand-title">SubSentry AI</h1>
+            <p className="brand-subtitle">Catalog, Plan Configuration & Pricing Engine</p>
+          </div>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
+
+        <div className="header-status">
+          <div className={`status-pill ${apiHealth.online ? 'status-online' : 'status-offline'}`}>
+            <span className="status-dot"></span>
+            {apiHealth.checking
+              ? 'Connecting...'
+              : apiHealth.online
+              ? 'Backend & PostgreSQL Connected'
+              : 'Backend Offline (FastAPI Port 8000)'}
+          </div>
+          <span className="badge badge-team">Person 2 Module</span>
         </div>
+      </header>
+
+      {/* Global Toast / Notification */}
+      {notification && (
+        <div className={`notification-toast toast-${notification.type}`}>
+          <span>{notification.message}</span>
+          <button className="toast-close" onClick={() => setNotification(null)}>
+            ✕
+          </button>
+        </div>
+      )}
+
+      {/* Main Navigation Tabs */}
+      <nav className="tab-navigation">
         <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+          className={`tab-btn ${activeTab === 'products' ? 'active' : ''}`}
+          onClick={() => setActiveTab('products')}
         >
-          Count is {count}
+          <span className="tab-icon">📦</span>
+          <span>Products & Variants</span>
         </button>
-      </section>
 
-      <div className="ticks"></div>
+        <button
+          className={`tab-btn ${activeTab === 'plans' ? 'active' : ''}`}
+          onClick={() => setActiveTab('plans')}
+        >
+          <span className="tab-icon">📅</span>
+          <span>Subscription Plans</span>
+        </button>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <button
+          className={`tab-btn ${activeTab === 'discounts' ? 'active' : ''}`}
+          onClick={() => setActiveTab('discounts')}
+        >
+          <span className="tab-icon">🏷️</span>
+          <span>Discount Rules</span>
+        </button>
+
+        <button
+          className={`tab-btn ${activeTab === 'taxes' ? 'active' : ''}`}
+          onClick={() => setActiveTab('taxes')}
+        >
+          <span className="tab-icon">🧾</span>
+          <span>Tax Rules</span>
+        </button>
+      </nav>
+
+      {/* Main Content Area */}
+      <main className="main-content">
+        {activeTab === 'products' && <ProductsTab onNotification={handleNotification} />}
+        {activeTab === 'plans' && <PlansTab onNotification={handleNotification} />}
+        {activeTab === 'discounts' && <DiscountsTab onNotification={handleNotification} />}
+        {activeTab === 'taxes' && <TaxesTab onNotification={handleNotification} />}
+      </main>
+
+      {/* Footer */}
+      <footer className="app-footer">
+        <div>
+          <strong>Subscription Management System</strong> &bull; Person 2 Module: Products, Variants, Plan Config, Discounts & Taxes
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+        <div className="footer-git-info">
+          Git Branch: <code>Liya-Roy</code> &bull; PostgreSQL: <code>subscription_management</code>
         </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      </footer>
+    </div>
+  );
 }
-
-export default App

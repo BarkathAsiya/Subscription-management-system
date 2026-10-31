@@ -1,6 +1,13 @@
 import sys
 from pathlib import Path
 
+# Configure utf-8 encoding for Windows console
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 # Add backend directory to path
 backend_dir = Path(__file__).resolve().parent
 sys.path.insert(0, str(backend_dir))
@@ -18,6 +25,7 @@ def run_tests():
 
     # Clean up any leftover test variants first
     with database.SessionLocal() as db:
+        db.query(models.SubscriptionPlan).delete()
         db.query(models.ProductVariant).delete()
         db.commit()
 
