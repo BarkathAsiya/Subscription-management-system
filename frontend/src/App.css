@@ -269,3 +269,676 @@ body {
   font-size: 14px;
   font-weight: 700;
 }
+
+/* ================================
+   SUBSENTRY AI DASHBOARD
+================================ */
+
+.dashboard-page {
+  min-height: 100vh;
+  display: flex;
+  background: #080b16;
+  color: #f4f5ff;
+  font-family: 'Inter', sans-serif;
+}
+
+.dashboard-sidebar {
+  width: 250px;
+  min-height: 100vh;
+  padding: 30px 20px;
+  background: #0d1120;
+  border-right: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 55px;
+}
+
+.dashboard-brand b {
+  color: #a78bfa;
+}
+
+.dashboard-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 23px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+}
+
+.sidebar-label {
+  color: #737d98;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+}
+
+.sidebar-link {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #929bb3;
+  padding: 14px 13px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: 0.25s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: rgba(124,58,237,0.17);
+  color: #c4b5fd;
+}
+
+.sidebar-link.active {
+  border: 1px solid rgba(139,92,246,0.2);
+}
+
+.sidebar-link span {
+  font-size: 19px;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+}
+
+.sidebar-help {
+  padding: 17px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #211743, #14244b);
+  border: 1px solid rgba(139,92,246,0.2);
+  margin-bottom: 20px;
+}
+
+.sidebar-help span {
+  color: #a78bfa;
+  font-size: 22px;
+}
+
+.sidebar-help b {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.sidebar-help p {
+  color: #929bb3;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.logout-button {
+  color: #fb7185;
+}
+
+.dashboard-main {
+  flex: 1;
+  min-width: 0;
+  padding: 38px 42px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.dashboard-date {
+  color: #8c96b1;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.dashboard-header h1 {
+  font-size: 29px;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.dashboard-header h1 span {
+  color: #a78bfa;
+}
+
+.dashboard-subtitle {
+  color: #929bb3;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.profile-avatar {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-weight: 700;
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 17px;
+  margin-bottom: 45px;
+}
+
+.stat-card {
+  padding: 22px;
+  background: #111729;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 15px;
+  transition: transform 0.25s, border-color 0.25s;
+}
+
+.stat-card:hover,
+.subscription-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(139,92,246,0.5);
+}
+
+.stat-top {
+  display: flex;
+  justify-content: space-between;
+  color: #929bb3;
+  font-size: 12px;
+}
+
+.stat-top span:last-child {
+  color: #a78bfa;
+  font-size: 19px;
+}
+
+.stat-card h2 {
+  font-size: 27px;
+  margin: 20px 0 7px;
+}
+
+.stat-card p {
+  color: #7e8aa5;
+  font-size: 11px;
+  margin: 0;
+}
+
+.dashboard-section {
+  margin-bottom: 42px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.section-heading h2 {
+  font-size: 19px;
+  margin: 0;
+}
+
+.section-heading p {
+  color: #8792ac;
+  font-size: 12px;
+  margin-top: 7px;
+}
+
+.view-all-button {
+  color: #a78bfa;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.subscription-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 17px;
+}
+
+.subscription-card {
+  background: #111729;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 15px;
+  padding: 21px;
+  transition: 0.25s;
+  min-width: 0;
+}
+
+.subscription-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subscription-brand-icon,
+.renewal-icon {
+  width: 43px;
+  height: 43px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.status-pill {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+}
+
+.status-pill.active {
+  color: #4ade80;
+  background: rgba(34,197,94,0.12);
+}
+
+.status-pill.expired {
+  color: #fb7185;
+  background: rgba(244,63,94,0.12);
+}
+
+.subscription-card h3 {
+  font-size: 15px;
+  margin: 19px 0 5px;
+}
+
+.subscription-category {
+  color: #8792ac;
+  font-size: 11px;
+}
+
+.subscription-price {
+  margin-top: 23px;
+}
+
+.subscription-price strong {
+  font-size: 23px;
+}
+
+.subscription-price span {
+  color: #8792ac;
+  font-size: 11px;
+}
+
+.subscription-renewal {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-top: 15px;
+  margin-top: 18px;
+  font-size: 10px;
+}
+
+.subscription-renewal span {
+  color: #8792ac;
+}
+
+.subscription-renewal b {
+  text-align: right;
+  font-size: 10px;
+}
+
+.renewal-list {
+  background: #111729;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 15px;
+  padding: 5px 20px;
+}
+
+.renewal-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.renewal-item:last-child {
+  border-bottom: none;
+}
+
+.renewal-icon {
+  width: 37px;
+  height: 37px;
+  font-size: 17px;
+}
+
+.renewal-name {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.renewal-name b {
+  font-size: 12px;
+}
+
+.renewal-name span {
+  color: #8792ac;
+  font-size: 10px;
+}
+
+.renewal-item > strong {
+  font-size: 13px;
+}
+
+.dashboard-footer {
+  color: #65718d;
+  font-size: 11px;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* Responsive dashboard */
+
+@media (max-width: 1100px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .subscription-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-main {
+    padding: 30px 25px;
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard-page {
+    flex-direction: column;
+  }
+
+  .dashboard-sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .dashboard-brand {
+    margin-bottom: 20px;
+  }
+
+  .dashboard-sidebar .sidebar-label,
+  .sidebar-help,
+  .sidebar-bottom {
+    display: none;
+  }
+
+  .dashboard-sidebar {
+    display: flex;
+  }
+
+  .dashboard-sidebar > .sidebar-link {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .dashboard-main {
+    padding: 25px 16px;
+  }
+
+  .dashboard-stats,
+  .subscription-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header h1 {
+    font-size: 23px;
+  }
+}
+
+/* =================================
+   SubSentry AI - Premium Dashboard
+================================= */
+
+.dashboard-page {
+  background: #080b18;
+  color: #f4f5ff;
+  min-height: 100vh;
+}
+
+.dashboard-sidebar {
+  background: #0d1122;
+  border-right: 1px solid rgba(255,255,255,.07);
+  width: 250px;
+  padding: 28px 20px;
+}
+
+.dashboard-main {
+  background: #080b18;
+  padding: 38px 42px;
+}
+
+.dashboard-brand {
+  font-size: 22px;
+  font-weight: 750;
+  margin-bottom: 55px;
+}
+
+.dashboard-logo {
+  background: linear-gradient(135deg,#8058ff,#3478ff);
+  border-radius: 12px;
+  box-shadow: 0 5px 22px rgba(110,80,255,.35);
+}
+
+.sidebar-label {
+  color: #737d9e;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.sidebar-link {
+  border-radius: 12px;
+  color: #929bb8;
+  padding: 13px 15px;
+  transition: .25s;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background: linear-gradient(100deg,rgba(123,83,255,.2),rgba(54,113,255,.08));
+  color: #fff;
+}
+
+.dashboard-header {
+  margin-bottom: 35px;
+}
+
+.dashboard-header h1 {
+  font-size: clamp(27px,3vw,36px);
+  letter-spacing: -1px;
+}
+
+.dashboard-date {
+  color: #8993b1;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
+
+.dashboard-subtitle {
+  color: #929bb8;
+}
+
+.profile-avatar {
+  background: linear-gradient(135deg,#8058ff,#3478ff);
+  border: 3px solid #202747;
+}
+
+.dashboard-stats {
+  gap: 18px;
+}
+
+.stat-card {
+  background: linear-gradient(145deg,#151c34,#101629);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px;
+  padding: 23px;
+  transition: transform .25s,border-color .25s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(133,103,255,.5);
+}
+
+.stat-top {
+  color: #a4acc5;
+  font-size: 13px;
+}
+
+.stat-card h2 {
+  font-size: 30px;
+  margin: 20px 0 7px;
+}
+
+.stat-card p {
+  color: #77829f;
+  font-size: 12px;
+}
+
+.dashboard-section {
+  margin-top: 42px;
+}
+
+.section-heading h2 {
+  font-size: 21px;
+}
+
+.section-heading p {
+  color: #8993b1;
+  font-size: 13px;
+}
+
+.view-all-button {
+  color: #a994ff;
+}
+
+.subscription-grid {
+  gap: 18px;
+}
+
+.subscription-card {
+  background: linear-gradient(145deg,#151c34,#0e1427);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px;
+  padding: 22px;
+  transition: .25s;
+}
+
+.subscription-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(133,103,255,.45);
+}
+
+.subscription-brand-icon {
+  border-radius: 13px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.2);
+}
+
+.status-pill {
+  border-radius: 30px;
+  font-size: 11px;
+  padding: 6px 11px;
+}
+
+.status-pill.active {
+  background: rgba(34,197,128,.12);
+  color: #4ee0a0;
+}
+
+.status-pill.expired {
+  background: rgba(255,92,110,.12);
+  color: #ff8190;
+}
+
+.subscription-category {
+  color: #8993b1;
+}
+
+.subscription-price strong {
+  font-size: 23px;
+}
+
+.subscription-price span {
+  color: #8993b1;
+}
+
+.subscription-renewal {
+  border-top: 1px solid rgba(255,255,255,.07);
+  margin-top: 18px;
+  padding-top: 15px;
+  color: #8993b1;
+}
+
+.subscription-renewal b {
+  color: #dfe3f7;
+}
+
+.renewal-list {
+  background: #11182d;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px;
+  padding: 8px 22px;
+}
+
+.renewal-item {
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  padding: 17px 0;
+}
+
+.renewal-item:last-child {
+  border-bottom: none;
+}
+
+.renewal-icon {
+  border-radius: 11px;
+}
+
+.renewal-name span {
+  color: #8993b1;
+}
+
+.renewal-item > strong {
+  color: #f0efff;
+}
+
+.dashboard-footer {
+  color: #68728e;
+  font-size: 12px;
+  padding-top: 35px;
+}
+
+@media (max-width: 700px) {
+  .dashboard-main {
+    padding: 24px 16px;
+  }
+
+  .dashboard-sidebar {
+    width: 100%;
+  }
+}

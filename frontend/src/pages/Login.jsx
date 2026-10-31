@@ -1,13 +1,13 @@
 
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-
+import { Link, useNavigate } from 'react-router-dom'
 function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -35,7 +35,7 @@ function Login() {
 
       // Store the login token for authenticated requests.
       localStorage.setItem('access_token', data.access_token)
-      setMessage('Login successful! Welcome to SubSentry AI.')
+    navigate('/dashboard')
     } catch (error) {
       setMessage(error.message || 'Something went wrong.')
     } finally {
