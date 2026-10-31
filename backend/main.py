@@ -1,5 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from database import SessionLocal, engine, Base
+import models
 
 app = FastAPI(
     title="Subscription Management System",
@@ -7,22 +11,50 @@ app = FastAPI(
     version="1.0.0",
 )
 
+Base.metadata.create_all(bind=engine)
 
-class Product(BaseModel):
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+class ProductCreate(BaseModel):
     name: str = Field(min_length=1, max_length=100)
-    product_type: str = Field(min_length=1)
+    product_type: str = Field(min_length=1, max_length=100)
     sales_price: float = Field(ge=0)
     cost_price: float = Field(ge=0)
     notes: str = ""
 
 
-class ProductVariant(BaseModel):
+class VariantCreate(BaseModel):
     name: str = Field(min_length=1, max_length=100)
     additional_price: float = Field(ge=0)
 
 
-products = {}
-next_product_id = 1
+class VariantResponse(BaseModel):
+    id: int
+    name: str
+    additional_price: float
+
+    class Config:
+        from_attributes = True
+
+
+class ProductResponse(BaseModel):
+    id: int
+    name: str
+    product_type: str
+    sales_price: float
+    cost_price: float
+    notes: str
+    variants: list[VariantResponse]
+
+    class Config:
+        from_attributes = True
 
 
 @app.get("/")
@@ -30,30 +62,27 @@ def home():
     return {"message": "Subscription Management System API is running!"}
 
 
-@app.post("/api/products", status_code=201)
-def create_product(product: Product):
-    global next_product_id
+@app.post("/api/products", response_model=ProductResponse, status_code=201)
+def create_product(product: ProductCreate, db: Session = Depends(get_db)):
+    db_product = models.Product(**product.model_dump())
 
-    product_id = next_product_id
-    products[product_id] = {
-        "id": product_id,
-        **product.model_dump(),
-        "variants": [],
-    }
+    db.add(db_product)
+    db.commit()
+    db.refresh(db_product)
 
-    next_product_id += 1
-
-    return products[product_id]
+    return db_product
 
 
-@app.get("/api/products")
-def get_products():
-    return list(products.values())
+@app.get("/api/products", response_model=list[ProductResponse])
+def get_products(db: Session = Depends(get_db)):
+    return db.query(models.Product).all()
 
 
-@app.get("/api/products/{product_id}")
-def get_product(product_id: int):
-    product = products.get(product_id)
+@app.get("/api/products/{product_id}", response_model=ProductResponse)
+def get_product(product_id: int, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(
+        models.Product.id == product_id
+    ).first()
 
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
@@ -61,43 +90,71 @@ def get_product(product_id: int):
     return product
 
 
-@app.put("/api/products/{product_id}")
-def update_product(product_id: int, updated_product: Product):
-    product = products.get(product_id)
+@app.put("/api/products/{product_id}", response_model=ProductResponse)
+def update_product(
+    product_id: int,
+    updated_product: ProductCreate,
+    db: Session = Depends(get_db),
+):
+    product = db.query(models.Product).filter(
+        models.Product.id == product_id
+    ).first()
 
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
 
-    product.update(updated_product.model_dump())
+    for field, value in updated_product.model_dump().items():
+        setattr(product, field, value)
+
+    db.commit()
+    db.refresh(product)
 
     return product
 
 
 @app.delete("/api/products/{product_id}")
-def delete_product(product_id: int):
-    product = products.pop(product_id, None)
+def delete_product(product_id: int, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(
+        models.Product.id == product_id
+    ).first()
 
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
+
+    db.delete(product)
+    db.commit()
 
     return {"message": "Product deleted successfully"}
 
 
-@app.post("/api/products/{product_id}/variants", status_code=201)
-def add_variant(product_id: int, variant: ProductVariant):
-    product = products.get(product_id)
+@app.post(
+    "/api/products/{product_id}/variants",
+    status_code=201,
+)
+def add_variant(
+    product_id: int,
+    variant: VariantCreate,
+    db: Session = Depends(get_db),
+):
+    product = db.query(models.Product).filter(
+        models.Product.id == product_id
+    ).first()
 
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
 
-    variant_data = {
-        "id": len(product["variants"]) + 1,
+    db_variant = models.ProductVariant(
         **variant.model_dump(),
-    }
+        product_id=product_id,
+    )
 
-    product["variants"].append(variant_data)
+    db.add(db_variant)
+    db.commit()
+    db.refresh(db_variant)
 
     return {
-        **variant_data,
-        "final_price": product["sales_price"] + variant_data["additional_price"],
+        "id": db_variant.id,
+        "name": db_variant.name,
+        "additional_price": db_variant.additional_price,
+        "final_price": product.sales_price + db_variant.additional_price,
     }
