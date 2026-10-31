@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Subscriptions from "./pages/Subscriptions";
+import Finance from "./pages/Finance";
 import { LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage } from "./pages/AuthPages";
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
     <Route path="/reset-password" element={<ResetPasswordPage/>}/>
     <Route path="/dashboard" element={<ProtectedRoute><Dashboard/></ProtectedRoute>}/>
     <Route path="/subscriptions" element={<ProtectedRoute><Subscriptions/></ProtectedRoute>}/>
+    <Route path="/finance" element={<ProtectedRoute><Finance/></ProtectedRoute>}/>
     <Route path="*" element={<Navigate to="/dashboard" replace/>}/>
   </Routes>;
 }
