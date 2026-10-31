@@ -35,3 +35,9 @@ class ProductVariant(Base):
     )
 
     product = relationship("Product", back_populates="variants")
+
+    @property
+    def final_price(self) -> float:
+        if self.product:
+            return round(self.product.sales_price + self.additional_price, 2)
+        return round(self.additional_price, 2)

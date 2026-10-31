@@ -39,6 +39,7 @@ class VariantResponse(BaseModel):
     id: int
     name: str
     additional_price: float
+    final_price: float
 
     class Config:
         from_attributes = True
@@ -129,6 +130,7 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
 
 @app.post(
     "/api/products/{product_id}/variants",
+    response_model=VariantResponse,
     status_code=201,
 )
 def add_variant(
@@ -152,9 +154,4 @@ def add_variant(
     db.commit()
     db.refresh(db_variant)
 
-    return {
-        "id": db_variant.id,
-        "name": db_variant.name,
-        "additional_price": db_variant.additional_price,
-        "final_price": product.sales_price + db_variant.additional_price,
-    }
+    return db_variant

@@ -1,7 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from urllib.parse import quote_plus
+from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).parent / ".env")
+load_dotenv()
 
 DB_USER = "postgres"
 DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "")
