@@ -1,4 +1,8 @@
-# SubSentry AI — Phase 1 (Brightloop Software)
+# Subscription-management-system
+
+Subscription management system for Brightloop Software: manage products, plans and subscriptions, auto-generate invoices, track payments, apply discounts and taxes, and view revenue reports, with role-based access for admin, staff and customers.
+
+## SubSentry AI — Phase 1 (Brightloop Software)
 
 Phase 1 implements the identity and access-control foundation required by the Brightloop Software Subscription Management System brief.
 
